@@ -1,19 +1,44 @@
-image = "";
+img = "";
+status = "";
 
 function preload() {
-  image = loadImage('dog_cat.jpg');
+  img = loadImage('dog_cat.jpg');
 }
 
 function setup() {
   canvas = createCanvas(640, 420);
   canvas.center();
+
+  objectDetection = ml5.objectDetector('cocossd',modelLoaded);
+  document.getElementById("status").innerHTML = "status:detecting objects";
+}
+
+function modelLoaded(){
+  console.log("modelLoaded");
+  status = true;
+  objectDetection.detect(img, gotResult);
+}
+
+function gotResult(error,results){
+  if(error){
+    console.error(error);
+  }
+  else{
+    console.log(results); 
+  }
 }
 
 function draw() {
-  image(image, 0, 0, 640, 420);
+  image(img, 0, 0, 640, 420);
   fill("red");
-  stroke("black");
-  text("dog", 45,75);
   noFill();
+  stroke("red");
+  text("dog", 45,75);
   rect(30,60,450,350);
+
+  fill("red");
+  noFill();
+  stroke("red");
+  text("cat",320,110);
+  rect(300,80,270,210);
 }
